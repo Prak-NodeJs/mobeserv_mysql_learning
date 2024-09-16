@@ -85,7 +85,17 @@ const getUsers = async (req, res, next)=>{
         if(req.query.name){
             query =`SELECT * FROM USERS WHERE name like '%${req.query.name}%'`
         }
-        const data = await executeQuery(query)
+        //use of procedure.
+        // let query2=`call user_details()`
+        // let query2 = `call emp_user()`
+
+        //use of funtion
+        let query2 = `select total_employee()`
+        query2 = `call get_emp_no_thorugh_name('mahesh', @emp_no)`
+        await executeQuery(query2)
+        let  query1 = `select @emp_no as nuuber`
+        const data = await executeQuery(query1)
+        
         res.status(200).json({
             success:true,
             message:"User Retrived",

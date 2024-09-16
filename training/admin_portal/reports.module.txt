@@ -1,0 +1,5 @@
+I) discrete activity consumption report.
+ Ans.. admin can view the quizs comsunes users
+       admin can see the employee details.
+
+II) 

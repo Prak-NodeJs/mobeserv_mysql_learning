@@ -1,0 +1,52 @@
+1) Online courses;
+2) Learning Pathway --- online courses created and connected to form
+                        a path, (learning path for users)
+
+
+
+
+-- in online courses;
+   you can edit the existing course.
+   you can create new course.
+     i- course name,
+     ii- visiblility - show and hide
+     iii- opn to- open, discrete.  
+            if course is open the any user can search and enrol them in that course.
+            if course is discrete then only assigned user can view and enroll themself in that course.
+    iv course-type:
+       online
+       profile access
+       toolkit.
+    
+    v. manager - assign manager to course.
+    vi. credit type points, before after completion of course.
+
+    -- modules
+       add multiple modules to particular course.
+       
+       -- source
+       --format 
+       -- browse the data from digital assests.
+    
+        -- we can add quiz - edit, disable,delete
+      
+        -- we can add feedback - edit, disable,delete
+
+    --notification:
+      we add different type of notification
+      we can add in that course.
+       course enrollment.
+
+   -- enrol users.
+       4 type of enrollment.
+       manually, directly admin can enroll users.
+       rule based - based on rule users will be enrolled.
+                    prospective. retropestive., department wise.
+       self - user can self enrolled them.
+       regulatory- 
+       bulk enrollment - downlaod template, add users, upload.
+
+  -- Rewards
+   badge we created in the gamification.
+   
+      

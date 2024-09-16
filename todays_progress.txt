@@ -1,0 +1,1371 @@
+Things Done:
+Installed MySQL Workbench and Server.
+
+Installed and Set Up Node.js Environment.
+
+Learned Concepts in MySQL:
+
+Data Types: Explored various data types such as INTEGER, VARCHAR, FLOAT, DECIMAL, DATE, TIMESTAMP, etc.
+
+Key Constraints: Studied constraints like UNIQUE, FOREIGN KEY, NOT NULL, AUTO_INCREMENT, and others.
+
+SQL Statements: Learned about different types of SQL statements such as DDL (Data Definition Language), DML (Data Manipulation Language), and TCL (Transaction Control Language).
+
+Basic SQL Commands: Gained practical knowledge of CREATE, INSERT, DELETE, UPDATE, ALTER, and SELECT statements.
+
+Table Relationships: Learned how to create relationships between tables, including:
+
+One-to-One Relationship
+One-to-Many Relationship
+Many-to-Many Relationship
+All the above concepts were practiced on the MySQL client.
+
+Set Up Node.js Server with MySQL and Express:
+
+Created routes to perform CRUD operations (INSERT, DELETE, UPDATE, GET) and search queries.
+Code Pushed to GitHub Repository.
+
+
+
+-- create table department_dup(
+-- dept_no char(4) not null,
+-- dept_name varchar(40) not null
+-- );
+
+-- insert into department_dup select * from departments;
+
+-- select * from department_dup;
+
+-- commit;
+
+-- update departments_dup set
+-- dept_no='d011',
+-- dept_name='something';
+
+-- Rollback;
+
+SELECT d.dept_no, count(e.emp_no) as 'number of employees' from departments as d inner join dept_manager as dm on dm.dept_no=d.dept_no inner join employees e on e.emp_no=dm.emp_no group by d.dept_no;
+
+select d.dept_no, e.emp_no, e.first_name, e.last_name, dm.from_date from departments as d inner join dept_manager as dm on dm.dept_no=d.dept_no inner join employees e on e.emp_no=dm.emp_no;
+
+
+
+manay to many relationships:
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | salary2 |
++-------+--------+--------+---------+
+|     1 | suresh |  23.00 |    44.9 |
+|     2 | suresh |  23.00 |  443334 |
++-------+--------+--------+---------+
+2 rows in set (0.03 sec)
+
+mysql> create table projects(
+    -> id int auto_increment primary key,
+    -> name varchar(30)
+    -> );
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> create table emp_projects (
+    -> id int auto_increment primary key,
+    -> projectId int not null,
+    -> empId int not null,
+    -> foreign key (projectId) references projects(id) on delete cascade,
+    -> foreign key (empId) references employee(empId)
+    -> );
+Query OK, 0 rows affected (0.22 sec)
+
+mysql> desc emp_projects;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| id        | int  | NO   | PRI | NULL    | auto_increment |
+| projectId | int  | NO   | MUL | NULL    |                |
+| empId     | int  | NO   | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> insert into projects(name) values ('project1'),('project2);
+    '> ^C
+mysql> ^C
+mysql> insert into projects(name) values ('project1'),('project2');
+Query OK, 2 rows affected (0.05 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> select emp.empId, proj.name, emp.salary from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId;
++-------+----------+--------+
+| empId | name     | salary |
++-------+----------+--------+
+|     2 | project1 |  23.00 |
+|     1 | project1 |  23.00 |
+|     2 | project2 |  23.00 |
++-------+----------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select emp.empId, proj.name, emp.salary from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId where emp.empId=1;
++-------+----------+--------+
+| empId | name     | salary |
++-------+----------+--------+
+|     1 | project1 |  23.00 |
++-------+----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select emp.empId, proj.name, emp.salary from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId group by proj.id;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'practice.emp.empId' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select proj.id, count(emp.empId) from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId group by proj.id;
++----+------------------+
+| id | count(emp.empId) |
++----+------------------+
+|  1 |                2 |
+|  2 |                1 |
++----+------------------+
+2 rows in set (0.01 sec)
+
+mysql> select proj.id, count(emp.empId) as employee_count from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId group by proj.id;
++----+----------------+
+| id | employee_count |
++----+----------------+
+|  1 |              2 |
+|  2 |              1 |
++----+----------------+
+2 rows in set (0.00 sec)
+
+
+INNER JOIN
+
+ select emp.empId, emp.name as emp_name, proj.name as project_name, emp.salary from employee as emp inner join emp_projects as emp_proj on emp.empId = emp_proj.empId inner join projects as proj on proj.id = emp_proj.projectId;
++-------+----------+--------------+--------+
+| empId | emp_name | project_name | salary |
++-------+----------+--------------+--------+
+|     1 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project2     |  23.00 |
+|     3 | mahesh   | NULL         |  23.33 |
++-------+----------+--------------+--------+
+
+LEFT JOIN
+
+ select emp.empId, emp.name as emp_name, proj.name as project_name, emp.salary from employee as emp left join emp_projects as emp_proj on emp.empId = emp_proj.empId left join projects as proj on proj.id = emp_proj.projectId;
++-------+----------+--------------+--------+
+| empId | emp_name | project_name | salary |
++-------+----------+--------------+--------+
+|     1 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project2     |  23.00 |
+|     3 | mahesh   | NULL         |  23.33 |
++-------+----------+--------------+--------+
+
+
+RIGHT JOIN
+retirves all records from right table and matched records from left table.
+
+ select emp.empId, emp.name as emp_name, proj.name as project_name, emp.salary from employee as emp right join emp_projects as emp_proj on emp.empId = emp_proj.empId right join projects as proj on proj.id = emp_proj.projectId;
++-------+----------+--------------+--------+
+| empId | emp_name | project_name | salary |
++-------+----------+--------------+--------+
+|     1 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project2     |  23.00 |
+|  NULL | NULL     | project3     |   NULL |
++-------+----------+--------------+--------+
+4 rows in set (0.00 sec)
+
+
+FULL JOIN.
+sql does not support full join directly, we make use of union to acheive result of full join, use union between left and right join.
+mysql> SELECT
+    ->     emp.empId,
+    ->     emp.name AS emp_name,
+    ->     proj.name AS project_name,
+    ->     emp.salary
+    -> FROM
+    ->     employee AS emp
+    -> LEFT JOIN emp_projects AS emp_proj ON emp.empId = emp_proj.empId
+    -> LEFT JOIN projects AS proj ON proj.id = emp_proj.projectId
+    ->
+    -> UNION
+    ->
+    -> SELECT
+    ->     emp.empId,
+    ->     emp.name AS emp_name,
+    ->     proj.name AS project_name,
+    ->     emp.salary
+    -> FROM
+    ->     employee AS emp
+    -> RIGHT JOIN emp_projects AS emp_proj ON emp.empId = emp_proj.empId
+    -> RIGHT JOIN projects AS proj ON proj.id = emp_proj.projectId;
++-------+----------+--------------+--------+
+| empId | emp_name | project_name | salary |
++-------+----------+--------------+--------+
+|     1 | suresh   | project1     |  23.00 |
+|     2 | suresh   | project2     |  23.00 |
+|     2 | suresh   | project1     |  23.00 |
+|     3 | mahesh   | NULL         |  23.33 |
+|  NULL | NULL     | project3     |   NULL |
++-------+----------+--------------+--------+
+5 rows in set (0.01 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+IF NULL function.
+
+
+ select emp.empId, emp.name as emp_name, IFNULL(proj.name, 'Not assigned to any project') as project_name, emp.salary from employee as emp left join emp_projects as emp_proj on emp.empId = emp_proj.empId left join projects as proj on proj.id = emp_proj.projectId;
++-------+----------+-----------------------------+--------+
+| empId | emp_name | project_name                | salary |
++-------+----------+-----------------------------+--------+
+|     1 | suresh   | project1                    |  23.00 |
+|     2 | suresh   | project2                    |  23.00 |
+|     2 | suresh   | project1                    |  23.00 |
+|     3 | mahesh   | Not assigned to any project |  23.33 |
++-------+----------+-----------------------------+--------+
+4 rows in set (0.00 sec)
+
+
+
+CROSS JOIN.
+
+a cross join will take the values from a certain table
+and connect them with all values from the tables we want to join it with.
+
+
+
+
+subquery.
+
+select * from employees where emp_no in (select emp_no from dept_manager);
+
+
+
+
+
+Self Join.
+
+in self join we joined the table with iteself.
+syntax
+
+select t1.column, t2.column from table as t1 join table as t2 on t1.column = t2.column;
+
+we can fetch manager name of each employee from employees table with the help join.
+
+Employees Table.
++-------+--------+--------+---------+---------+
+| empId | name   | salary | salary2 | manager |
++-------+--------+--------+---------+---------+
+|     1 | suresh |  23.00 |    44.9 |       2 |
+|     2 | suresh |  23.00 |  443334 |       3 |
+|     3 | mahesh |  23.33 |   33.33 |       1 |
++-------+--------+--------+---------+---------+
+
+Query and Output.
+select t1.name, t2.name as manager_name from employee as t1 join employee as t2 on t2.empId=t1.manager;
++--------+--------------+
+| name   | manager_name |
++--------+--------------+
+| suresh | hitesh       |
+| hitesh | mahesh       |
+| mahesh | suresh       |
++--------+--------------+
+
+Understanding the Table Structure:
+
+Each employee has a manager represented by the manager column, which contains the empId of their manager.
+How the Correct Query Works:
+
+t1 refers to the employees whose managers we want to find.
+t2 refers to the managers themselves.
+The JOIN condition ON t2.empId = t1.manager links each employee (t1) to their manager (t2) using the manager column of t1 and the empId of t2.
+
+
+
+
+VIEWS
+
+view is a virtual table whose contents are obtained from an existing table or tables;
+
+we retrive data from tables and put it into view.
+
+
+
+CREATE VIEW view_name(view_name) as
+select column_1, column_2 from table_name;
+
+example.
+
+create view view_details as
+select * from employee;
+
+mysql> create view view_details as
+    -> select * from employee;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from view_details;
++-------+--------+--------+---------+---------+
+| empId | name   | salary | salary2 | manager |
++-------+--------+--------+---------+---------+
+|     1 | suresh |  23.00 |    44.9 |       2 |
+|     2 | hitesh |  23.00 |  443334 |       3 |
+|     3 | mahesh |  23.33 |   33.33 |       1 |
++-------+--------+--------+---------+---------+
+3 rows in set (0.01 sec)
+
+
+
+
+two types of routines;
+stored procedures 
+2. functions
+  1. user defined funtion 
+   2. inbuilt function (aggregate funtion(avg, min, max, count),
+       date time funtion(now, curdate() ))
+
+
+syntax for calling stored procedures..
+call procedure_name;
+
+
+Stored procedures.
+
+Set of sql statements that we can execute as single unit.
+
+instead of writing any query again and again
+we can make stored procedure for that.
+and where ever the query is required we can
+simply, call that stored procedure.
+
+
+syntax
+delimiter $$
+create procedure procedure_name(param1, param2)
+Begin
+ sql statements;
+End $$
+
+
+delimiter $$
+create procedure select_employees()
+Begin
+select * from employee;
+end $$
+delimiter ;
+
+//parameterized procedures..
+delimiter $$
+create procedure emp_salary(IN p_emp_no INTEGER)
+begin
+select e.first_name, e.last_name, s.salary, s.from_date, s.to_date
+ from employees e join
+ salaries s on e.emp_no = s.emp_no
+ where e.emp_no = p_emp_no;
+end $$
+delimiter ;
+
+
+* we can pass output parameter while creating
+procedure for storing the result of the procesudre.
+
+create procedure emp_avg
+
+delimiter $$
+create procedure emp_avg_salary(IN p_emp_no INTEGER, out p_avg_salary DECIMAL(10,2))
+begin
+select avg(s.salary) INTO p_avg_salary
+ from employees e join
+ salaries s on e.emp_no = s.emp_no
+ where e.emp_no = p_emp_no;
+end $$
+delimiter ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE emp_info(
+    IN p_first_name VARCHAR(255), 
+    IN p_last_name VARCHAR(255), 
+    OUT p_emp_no INTEGER
+)
+BEGIN
+    SELECT 
+        e.emp_no
+    INTO 
+        p_emp_no
+    FROM 
+        employees e
+    WHERE 
+        e.first_name = p_first_name
+        AND e.last_name = p_last_name;
+END$$
+
+DELIMITER ;
+
+
+
+
+
+SQL VARIABLE;
+
+set @avg_salary = 0;
+call employees.emp_avg_salary(11300,@avg_salary);
+select @avg_salary;
+
+
+
+
+User-defined function.
+
+
+DELIMITER $$
+create funtion funtion_name(parameter data_type) RETURNS data_type
+declare variable_name data_type
+BEGIN
+select 
+retunr variable_name
+END$$
+Delimiter;
+
+
+difference between procedure and functions
+
+there no out parameters in funtions.
+there is no IN keyword in function.
+
+
+example..
+
+delimiter $$
+create function f_emp_avg_salary (p_emp_no INTEGER) RETURNs
+DECIMAl (10,2)
+DETERMINISTIC
+BEGIN
+DECLARE v_avg_salary DECIMAL (10,2);
+select avg(s.salary) into v_avg_salary from employees e
+join
+salaries s on e.emp_no = s.emp_no
+where e.emp_no= p_emp_no;
+return v_avg_salary;
+end$$
+
+delimiter ;
+
+
+select f_emp_avg_salary(11300)
+
+
+
+
+sql varibales
+
+1 local variable.
+2 Session veriable.
+3. Global variable
+
+
+1. local variable we declare within the body of funtion;
+BEGIN
+DECLARE v_avg_salary DECIMAL (10,2);    -------> local variable
+select avg(s.salary) into v_avg_salary from employees e
+join
+salaries s on e.emp_no = s.emp_no
+where e.emp_no= p_emp_no;
+return v_avg_salary;
+end$$
+
+
+2.
+session.
+series of informaion exchange interactions, or a 
+dialogue, between a computer and a user.
+
+-e.g.  a dialogue between the mysql server and a client application like 
+      mysql workbench.
+
+these are certain sql objects that are valid 
+for a specific session only.
+
+
+-- a variable that exists only for the 
+session in which you are operating.
+
+-- it is defined on our server, and it lives
+   there.
+-- it is visible to the connection being used only.
+
+acceable within the same connection
+set @v_var =2;
+select @v_var
+
+
+ Global
+ acceable to all connection.
+SET @@global.max_connection = 1;
+
+
+
+
+
+set @v_emp_no=10004;
+select first_name, last_name, hire_date from employees where emp_no=@v_emp_no;
+
+select @v_emp_no;
+
+
+Triggers;
+
+triggers are stored funtion that get automatically executed when specific event occures.
+
+there are 6 types of triggers
+before insert
+after insert,
+before update,
+after update,
+before delete,
+after delete
+mysql> create trigger emp_salary
+    -> before insert on employee
+    -> for each row
+    -> begin
+    -> if new.salary<0
+    -> then set new.salary=0;
+    -> end if;
+    -> end $$
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> delimiter ;
+mysql> insert into employee(name,salary,salary2,manager) values
+    -> ('kitesh',-2,3.44, 1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+---------+
+| empId | name   | salary | salary2 | manager |
++-------+--------+--------+---------+---------+
+|     1 | suresh |  23.00 |    44.9 |       2 |
+|     2 | hitesh |  23.00 |  443334 |       3 |
+|     3 | mahesh |  23.33 |   33.33 |       1 |
+|     4 | kitesh |   0.00 |    3.44 |       1 |
++-------+--------+--------+---------+---------+
+
+before update;
+ql> create trigger before_update_salary
+    -> before update on employee
+    -> for each row
+    -> begin
+    -> if new.salary<0 then
+    -> set new.salary = old.salary;
+    -> end if;
+    -> end $$
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> delimiter ;
+mysql> update employee set salary = -1 where empId = 1;
+Query OK, 0 rows affected (0.02 sec)
+
+
+Create a trigger that checks if the hire date of an employee is higher than the current date. If true, set this date to be the current date. Format the output appropriately (YY-MM-DD).
+
+delimiter $$
+create trigger trig_emp_hire 
+before insert on employees
+for each row
+begin
+ if new.hire_date> curdate() then
+ set new.hire_date = curdate();
+ end if;
+end $$
+
+delimiter ;
+
+
+insert into employees  (emp_no, birth_date, first_name, last_name,gender,hire_date)
+values (101,'2000-01-03', 'prakash','prajapati','F','2024-09-12');
+
+select * from employees where emp_no=101;
+
+
+
+
+
+
+indexes..
+for retriving the data faster.
+
+create index index_name on table (column1);
+
+show index from employees;
+
+
+
+mysql window function;
+an advanced sql tool performing a calculation 
+for every records in the data set, using other 
+records associated with the
+specifid one from
+the table;
+
+
+
+mysql window funtions
+1. aggregate window funtions
+2. nonaggregate window funtion
+   1. ranking window funtions 
+   2. value window function
+
+
+window functions
+ROW_NUMBER () OVER () row_no;
+RANK () OVER () As row_num;
+DENSE_RANK () over () as row_num;
+
+
+1. ROW_NUMBER;
+
+select emp_no, salary,
+ROW_NUMBER() OVER (partition by emp_no  order by salary desc) AS row_num
+from salaries;
+
+emp_no  salary  rank
+11839	89814	9
+11839	89814	10
+11839	93590	11
+11839	95810	12
+
+partition by, partition the data based on emp_no.
+order by to order the records based on condition.
+
+
+
+RANK funtions
+select emp_no, salary,
+rank() over (partition by emp_no order by salary)
+from salaries where emp_no = 11839;
+
+
+now when we are using rank after 3 we are directly getting rank 5 not 4, 
+in order to resolve this issue we can make use of DENSE_RANK
+assign same rank if salary value is same;
+emp_no  salary  rank
+11839	89814	9
+11839	89814	9
+11839	93590	11
+11839	95810	12
+
+
+using DENSE_RANK
+
+select emp_no, salary,
+DENSE_RANK() over (partition by emp_no order by salary)
+from salaries where emp_no = 11839;
+
+emp_no  salaryn  rank
+11839	89814	9
+11839	89814	9
+11839	93590	10
+11839	95810	11
+
+
+
+excercise;
+
+1. Write a query containing a window function to obtain all salary values that
+ employee number 10560 has ever signed a contract for.
+
+Order and display the obtained salary values from highest to lowest.
+
+
+ans.. select salary,
+DENSE_RANK () over (partition by emp_no order by salary desc) as row_num
+ from salaries
+where emp_no = 10560;
+
+
+
+2.
+Write a query that upon execution, displays 
+the number of salary contracts that each manager has ever signed while working in the company.
+
+Ans..
+select dm.emp_no, count(salary) as no_of_contract
+from dept_manager dm join
+salaries s on s.emp_no = dm.emp_no
+group by dm.emp_no
+order by dm.emp_no;
+
+
+3.
+Write a query that upon execution retrieves a result 
+set containing all salary values that employee 10560 has
+ ever signed a contract for. Use a window function to rank all salary values from highest to lowest in a way that equal salary values bear the same rank and that 
+gaps in the obtained ranks for subsequent rows are allowed.
+
+Ans.
+select emp_no, salary,
+rank () over w as row_rank
+from salaries 
+WINDOW w as (Partition by emp_no order by salary desc);
+
+4.
+Write a query that upon execution retrieves a result 
+set containing all salary values that employee 10560 has ever 
+signed a contract for. Use a window function to rank all salary values from highest to lowest in a way that equal salary values bear the same rank and that gaps in the obtained ranks for subsequent rows are not allowed.
+
+Ans.
+select emp_no, salary,
+DENSE_RANK() over w as row_rank
+from salaries 
+WINDOW w as (Partition by emp_no order by salary desc);
+
+
+
+5.
+Write a query that ranks the salary values in descending order of all contracts signed by employees numbered between 10500 and 10600 inclusive. Let equal salary values for one and the same employee bear the same rank. Also, allow gaps in the ranks obtained for their subsequent rows.
+
+Use a join on the “employees” and “salaries” tables to obtain the desired result.
+
+select e.emp_no, s.salary,
+rank() over(partition by e.emp_no order by s.salary desc) as rank_number
+from employees e join
+salaries s
+on e.emp_no=s.emp_no 
+where e.emp_no between 10500 and 10600;
+
+
+6.
+
+select e.emp_no, s.salary,
+DENSE_RANK () over (partition by e.emp_no order s.salary desc) as salary_rank
+from employees e
+join salaries s 
+on s.emp_no = e.emp_no
+where e.emp_no between 10500 and 10600 
+
+
+7.
+
+Write a query that ranks the salary values in descending 
+order of the following contracts from the "employees" database:
+
+- contracts that have been signed by employees numbered 
+between 10500 and 10600 inclusive.
+
+- contracts that have been signed at least 4 
+full-years after the date when the given employee was hired in the company for the first time.
+
+In addition, let equal salary values of a certain employee bear the same rank. Do not allow gaps in the ranks obtained for their subsequent rows.
+
+Use a join on the “employees” and “salaries” tables to obtain the desired result.
+
+
+ans..
+
+select e.emp_no, s.salary,
+rank() over(partition by e.emp_no order by s.salary desc) as rank_number,
+e.hire_date,
+s.from_date,
+(year(s.from_date) - year(e.hire_date)) as years_from_start
+from employees e join
+salaries s
+on e.emp_no=s.emp_no 
+and year(s.from_date)-year(e.hire_date)>=5
+where e.emp_no between 10500 and 10600;
+
+
+
+..
+
+value window funtion;
+
+LAG()  and lead()
+
+returns a value that can be found in the database;
+
+LAG ()-> returns the value from a specified field of a record that
+precedes the current row.  to track the previous field value.
+
+LEAD () -> to trac the previous field values.
+
+
+query:
+write query to obtain salary of all employee, 
+and add these columns 
+their previous salary column, next salary column,
+difference between currrent salary and previous salary column,
+difference between currrent salary and next salary column,
+
+
+select emp_no, salary,
+lag(salary) over() as prev_salary,
+lead(salary) over() as next_salary,
+salary- lag(salary) over () as diff_cur_prev,
+lead(salary) over() - salary as diff_prev_cur
+from salaries
+where emp_no = 10001;
+
+
+
+QUESTION:
+Write a query that can extract the following information from the "employees" database:
+
+- the salary values (in ascending order) of the contracts signed by all employees numbered between 10500 and 10600 inclusive
+
+- a column showing the previous salary from the given ordered list
+
+- a column showing the subsequent salary from the given ordered list
+
+- a column displaying the difference between the current salary of a certain employee and their previous salary
+
+- a column displaying the difference between the next salary of a certain employee and their current salary
+
+Limit the output to salary values higher than $80,000 only.
+
+Also, to obtain a meaningful result, partition the data by employee number.
+
+
+select emp_no, salary,
+rank() over(partition by emp_no order by salary desc) as row_rank,
+lag(salary) over() as prev_salary,
+lead(salary) over() as next_salary,
+salary - lag(salary) over() as diff_between_cur_prev_salary,
+lead(salary) over () - salary as diff_between_cur_next_salary
+from salaries
+where salary>80000 and emp_no between 10500 and 10600;
+
+
+
+
+CTE:
+
+MYSQL COMMAN Table expression 
+
+1. A comman table expression,or cte, is a temporary
+named result set created from a simple select statement
+that can be used in a subsequent select statement.
+
+2. We can define ctes by adding a WITH clause directly 
+before select, inser, update, delete, or merge 
+statement.
+
+3. The with clause can include one or more ctes set by commas.
+
+
+
+WITH cte_name as (select ..from...)
+select, insert or update, delete
+from
+cte_name...;
+
+
+ with my_cte as (select max(salary) from employee)
+    -> select * from employee join my_cte;
++-------+--------+--------+---------+-------------+
+| empId | name   | salary | manager | max(salary) |
++-------+--------+--------+---------+-------------+
+|     1 | suresh |  23.00 |       2 |       23.33 |
+|     2 | hitesh |  23.00 |       3 |       23.33 |
+|     3 | mahesh |  23.33 |       1 |       23.33 |
+|     4 | kitesh |   0.00 |       1 |       23.33 |
++-------+--------+--------+---------+-------------+
+
+2nd example..
+
+fetch employees who earn more than average salary of all employee;
+
+first we have to retirves average_salary,
+then retirves all employee who is earning more than
+average_salary;
+
+with avg_cte as (select avg(salary) as average_salary from employee)
+    -> select * from employee e, avg_cte av
+    -> where salary > av.average_salary;
++-------+--------+--------+---------+----------------+
+| empId | name   | salary | manager | average_salary |
++-------+--------+--------+---------+----------------+
+|     1 | suresh |  40.00 |       2 |      21.582500 |
+|     2 | hitesh |  23.00 |       3 |      21.582500 |
+|     3 | mahesh |  23.33 |       1 |      21.582500 |
++-------+--------+--------+---------+----------------+
+
+
+alternate way..
+
+mysql> select * from employee where salary>(select avg(salary) from employee);
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
++-------+--------+--------+---------+
+3 rows in set (0.01 sec)
+
+mysql>
+
+
+
+Exercise #1:
+
+Use a CTE (a Common Table Expression) and a SUM() function 
+in the SELECT statement in a query to find out how many 
+male employees have never signed a contract with a salary
+value higher than or equal to the all-time company
+salary average.
+
+
+with cte as (
+    select avg(salary) as avg_salary from salaries
+)
+select 
+sum(case when s.salary<c.avg_salary then 1 else 0 end) as
+no_salaries_below_age
+from employees e 
+join
+salaries s
+on 
+e.emp_no = s.emp_no and e.gender='M'
+join cte c;
+
+
+
+Exercise #2:
+Use MySQL joins (and don’t use a Common Table Expression) 
+in a query to find out how many male employees 
+have never signed a contract with a salary value
+ higher than or equal to the all-time company salary 
+ average (i.e. to obtain the same result as in the 
+ previous exercise).
+
+
+select count(s.emp_no) as_not_signed_contract
+from employees e
+join
+salaries s
+on e.emp_no= s.emp_no
+and e.gender = 'M'
+and s.salary<=(select avg(salary) from salaries);
+
+
+
+
+Exercise #3:
+
+Use a cross join in a query 
+to find out how many male 
+employees have never signed a
+ contract with a salary value higher 
+ than or equal to the all-time company 
+ salary average (i.e. to obtain the same 
+ result as in the previous exercise).
+
+
+with cte as (
+    select avg(salary) as avg_salary from salaries
+)
+select 
+sum(case when s.salary<c.avg_salary then 1 else 0 end) as
+no_salaries_below_age
+from employees e 
+join
+salaries s
+on 
+e.emp_no = s.emp_no and e.gender='M'
+cross join cte c;
+
+
+
+
+multiple with clauses.
+
+
+with c1 as (
+    select avg(salary) from salaries
+),
+c2 as (
+    select e.emp_no, max(s.salary) as f_highest_salary
+    from salaries s
+    join employees e on e.emp_no = s.emp_no
+    group by s.emp_no
+)
+select 
+  sum(case when c2.f_highest_salary>c1.avg_salary then 1 else 
+0 end) f_highest_salaries_above_avg,
+count(e.emp_no) as total_no_female_contracts
+from employees e
+join
+ e.emp_no=c2.emp_no
+ cross join 
+ c1
+
+
+
+.write query to find out female employees who is earning more
+salary than company's total avg salary;
+
+with c1 (avg_salary) as (
+    select avg(salary) from salaries
+),
+c2 as (
+    select e.emp_no, max(s.salary) as f_highest_salary
+    from salaries s
+    join employees e on e.emp_no = s.emp_no
+    group by s.emp_no
+)
+select 
+  sum(case when c2.f_highest_salary>c1.avg_salary then 1 else 
+0 end) f_highest_salaries_above_avg,
+count(e.emp_no) as total_no_female_contracts
+from employees e
+join
+ c2 on e.emp_no=c2.emp_no
+ cross join 
+ c1
+
+
+
+Mysql temporary tabales 
+
+mysql temporary tables are tables which exit till theb session
+is active..
+
+
+
+-----
+date_sub(now(), interval 1 month);  to subtract 1 month from current datetime.
+date_sub(now(), interval -1 year);
+
+
+
+
+
+
+Exercise #1:
+
+Create a temporary table called dates containing the following three columns:
+
+- one displaying the current date and time,
+
+- another one displaying two months earlier than the current date and time, and a
+
+- third column displaying two years later than the current date and time.
+
+
+
+
+
+
+create temporary table temp_table 
+select now() as current_date,
+     sub_date(now(), interval 2 month) as 2_month_ealier,
+     date_sub(now(), interval -2 year) as 2_year_later;
+
+
+Exercise #2:
+
+Write a query that, upon execution, allows you to check the result set contained in the dates temporary table you created in the previous exercise.
+
+select * from temp_table ;
+
+
+
+Exercise #3:
+
+Create a query joining the
+ result sets from the dates 
+ temporary table you created
+  during the previous lecture with a new 
+  Common Table Expression (CTE) containing
+   the same columns. Let all columns in the 
+   result set appear on the same row.
+
+
+
+with ct as (
+select 
+now() as current_date_and_time,
+date_sub(now(), interval 2 month) as two_months_earlier,
+date_sub(now(), interval -2 year) as two_years_later
+)
+select * from temp_table
+join ct;
+
+
+
+Exercise #4:
+
+Again, create a query joining the result sets from the 
+dates temporary table you created during the previous
+ lecture with a new Common Table Expression (CTE) containing 
+ the same columns. This time, combine the two sets vertically.
+
+
+with ct as (
+select 
+now() as current_date_and_time,
+date_sub(now(), interval 2 month) as two_months_earlier,
+date_sub(now(), interval -2 year) as two_years_later
+)
+select * from temp_table
+union
+select * from ct;
+
+
+
+
+Exercise #5:
+
+Drop the male_max_salaries and 
+dates temporary tables you recently created.
+
+
+drop table if exists temp_table
+
+
+
+Transaction:
+
+start transaction;
+sql queries
+commit/Rollback;
+savepoint savepoint_name; -> to rollback till certain points only we can make use  of savepoint;
+ rollback to savepoint_name;
+
+
+examples;;
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from employee where empId = 3;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     4 | kitesh |   0.00 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     4 | kitesh |   0.00 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> delete from employee where empId = 4;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employee (name, salary, manager) values ('kiran',340.9,1);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee (name, salary, manager) values ('kiran2',34.93,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
+|     6 | kiran2 |  34.93 |       1 |
++-------+--------+--------+---------+
+5 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into employee (name, salary, manager) values ('kiran2',34.93,1);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
+|     7 | kiran2 |  34.93 |       1 |
++-------+--------+--------+---------+
+5 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from employee where empId = 7;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> commit ;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
++-------+--------+--------+---------+
+4 rows in set (0.00 sec)
+
+
+
+
+savepoint 
+
+to rollback till somepoint use can make use of savepoint;
+
+example..
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee (name, salary, manager) values ('kiran2',34.93,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint kiran_inserted;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee (name, salary, manager) values ('kiran3',34.93,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> rollback to kiran_inserted;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee; 
++-------+--------+--------+---------+
+| empId | name   | salary | manager |
++-------+--------+--------+---------+
+|     1 | suresh |  40.00 |       2 |
+|     2 | hitesh |  23.00 |       3 |
+|     3 | mahesh |  23.33 |       1 |
+|     5 | kiran  | 340.90 |       1 |
+|    10 | kiran2 |  34.93 |       1 |
++-------+--------+--------+---------+
+
+
+
+
+show created procedures of particular database;
+ SHOW PROCEDURE STATUS WHERE Db = 'practice';
+
+
+see the query inside stored procedure.
+ show create procedure emp_info;
+
+
+
+ show triggers of particular database;
+     show trigger from 'practice';
+ 
+ check query of particular function;
+     show create trigger trigger_name;
+
+ show funtions of particular database;
+      show function status where db = practice;
+
+ check query of particular function;
+      show create function funtion_name;
+
+
+show views tables;
+    SHOW FULL TABLES WHERE Table_type = 'VIEW';
+show particular view;
+    show create view view_name;

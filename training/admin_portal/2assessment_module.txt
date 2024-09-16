@@ -1,0 +1,116 @@
+I assesments:
+
+for learners assessments.
+
+i. Admin can add questions to
+questions bank category.
+    admin can add questions in the existing
+    question bank category, or he can
+    create new question bank category.
+    then you can create question.
+      i: you can create differenct type of questions
+        i. mcq, 
+           ii you can create text type question or image type question,
+            ii. create level of question, additional info we can aded.
+             iii. can add multiple choices.
+              you have to set correct answer and add score for that
+              .
+        ii. matching.
+           we can create matching questions
+           match one to another,
+           provide left side, right side column.
+           add correct column of matching.
+           you can set score.
+
+        iii. sequence type questions.
+              arrange the questions in the correct sequence.
+              we to set the correct squence as well.
+
+        iv. short.
+            
+
+
+ii  after creating questions.
+ admin can create quiz.
+
+ where you can select all questions
+    quiz code will be generated automatically when saved.
+
+ .. navigation.
+    sequenceial - learner can attempt the questions in sequencial order.
+               he can't go back to previous question
+    free - user can go back to any type of questions.
+
+  -- qusestion order.
+      suffle, or order,
+  
+  -- questions on pages.
+
+
+  -- estimated time.
+      we can set time for the particular quiz.
+      after completion of time the quiz will be automatically 
+      submited.
+
+  -- visiblility
+     i) open ii) discrete.
+
+     if visible is open then users can search and attempt quizes.
+     if it is discrete then all users won't see this coiurse.
+
+   -- band.
+       employees unders this band will be able to seach and 
+       attempt that quizes.
+
+  -- behaviour.
+      differed - after submition of complete quiz users will see the 
+                  result or final score.
+      immediate - after attempting each questions  user can see
+                  this result or score for that quiz.
+
+
+   --- mark quiz as complete:
+    i) learner has attempted.
+    ii) learner as passed    - you have to give passing marks.
+
+  -- multiple attempts:
+   one 
+   two
+   three
+   four. 
+   unlimited.              which score to be considered.
+
+   --  delay between 2 attempts;
+
+
+  addtionals field: for searching for the quizes through these fieelds:
+
+  learning category, skill category, busines, department.
+
+  after saving the quiz options.
+
+   we can add questions;
+
+   add section the starting adding qustions into that section.
+
+
+  i) question type - random, static,
+
+  ii) question type - choice, matching etc.
+
+  iii) if you selected quations type random, then you just  
+       have to put the count of question you want to add into the 
+       quiz.   every user will get different questions..
+   
+    
+iii assignments;
+ admin can give set of questions.
+ then user can answer and upload back.
+
+create assignment,
+  fetch the assignement from dam
+  
+
+
+
+ 

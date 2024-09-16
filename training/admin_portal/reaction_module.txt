@@ -1,0 +1,15 @@
+feedback:
+
+ feedback about the courses,
+ see the feedback from the learners.
+
+ for taking feedback for learner.
+  you can add questions in the feedback.
+  again you can select type of questions.
+  text, multiple,star rating,
+  binary. - yes or no
+
+users can't search the feedback like they 
+do for quiz, feedback will be avilable
+inside course, batch etc.
+

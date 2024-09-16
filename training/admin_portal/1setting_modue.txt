@@ -1,0 +1,110 @@
+ILLUME:
+
+
+inside setting..
+1. learner - adding new employee, generting credentials, editing,
+   adding multiple employees;
+
+2.Users.
+
+
+admin can add new employee;
+
+we can add one employee at a time.
+I. Add EMployees;
+1.  path - admin.edgelearning.co.in/#/pages/plan/employees/add-employee;
+
+required-details  for adding employee;
+first_name,
+last_name,
+email_address -   unique email address only.
+mobile_no,      - unique mobile_no
+source -- how employee come in organixation
+          walk-in, direct etc.
+
+we are just creating trainer for by adding its details.
+if we want to make him to login inside our system
+we have check the radio button.
+
+    1. we can create its credentials.  - create login credetianls.
+    2. we can send his login credentials through email.
+    username should be unique. 
+         
+   Additional Details..
+
+   dob, employee demartment,
+   business, sub department,
+   band,
+   employee classification,
+   status,
+   reporting manager, date of leaving, employee category.
+
+
+if we add his details without generating login credentials for him
+he will be added as learner, and later also when ever we want
+to allow that learner to login into our system we can generate 
+login credentials for him.
+
+
+
+2. WE CAN ADD MULTIPLE EMPLOYEES THROUGH CLICKING ON 
+ADD EMPLOYEES.
+
+we will get excel file which includes the format in which you 
+have to pass the users data and upload it.
+
+3. you can edit employees details any time.
+   you can search users using name and his date of joining.
+   you cann't edit his username.
+
+
+II.  USERS module.
+
+1. contains all type of users such as learner,manager, admin
+2. we can create user credentials by clicking on add user.
+   we can seleact learner and create credentials.
+3. we assign role, create credentials to particular user through this users
+  modules.
+
+
+III.  Notifications templates.
+      user will get notification for their course enrollment, course completion, app notication, through email or on 
+      app.
+      we can edit content of noticatiosn, but we can't create new one
+      from frontend.
+
+
+IV : Trainer
+   this module we use for adding external trainer. who is not particular
+   of our organization.
+
+
+V:  Comments;
+
+Admin can view Comments posted on courses, comments of learner.
+admic hide and show unreivalent comment through this module.
+
+
+VI  Location AND Venue 
+  for blended learning.
+  blended learning means for physicial classes
+  admin can choose location and venue so that learner 
+  can get the notification of location and venue.
+
+
+VII  customs.
+
+we can mark certain fields manedorty or optional from here.
+fields that are used while creating leaners.
+
+
+VIII unenrol.
+
+for bulk unenrollment. 
+admin can uneroll multiple employees from sepecifid courses.
+you have to download templates and add employee and their course
+code to unenrol those employees from those courses.
+
+
+IX  we can add 20k employees at a time through template.
+
